@@ -1,0 +1,17 @@
+name: Auto Merge Pull Requests from Specific User
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+
+jobs:
+  merge:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Merge Pull Request
+        if: github.event.pull_request.user.login == 'exercism-solutions-syncer'
+        uses: peter-evans/merge-pull-request@v3
+        with:
+          pull-request-number: ${{ github.event.pull_request.number }}
+          merge-method: merge
+          commit-message: 'Auto-merged by GitHub Action'
