@@ -27,7 +27,7 @@ jobs:
           fi
 
       - name: Automerge
-        if: steps.check_mergeable.outputs.mergeable == 'true'
+        if: steps.check_mergeable.outputs.mergeable == 'true' && github.event.pull_request.user.login == 'exercism-solutions-syncer'
         uses: pascalgn/automerge-action@v0.16.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
