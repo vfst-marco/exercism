@@ -15,10 +15,20 @@ jobs:
       contents: write
       pull-requests: write
     steps:
-      - id: automerge
-        name: Automerge
+      - name: Check for mergeability
+        id: check_mergeable
+        run: |
+          if [[ "${{ github.event.pull_request.mergeable }}" == "true" ]]; then
+            echo "This pull request is mergeable."
+            echo "::set-output name=mergeable::true"
+          else
+            echo "This pull request is not mergeable."
+            echo "::set-output name=mergeable::false"
+          fi
+
+      - name: Automerge
+        if: steps.check_mergeable.outputs.mergeable == 'true'
         uses: pascalgn/automerge-action@v0.16.4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MERGE_LABELS: 'automerge'
-          MERGE_METHOD: 'merge'
+          MERGE_METHOD: 'merge'  # Choose 'merge', 'squash', or 'rebase'
