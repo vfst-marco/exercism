@@ -32,3 +32,12 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           MERGE_METHOD: 'merge'  # Choose 'merge', 'squash', or 'rebase'
+
+      - name: Delete Branch
+        if: steps.check_mergeable.outputs.mergeable == 'true' && github.event.pull_request.user.login == 'exercism-solutions-syncer'
+        run: |
+          git fetch origin
+          git branch -d "${{ github.head_ref }}"
+          git push origin --delete "${{ github.head_ref }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
