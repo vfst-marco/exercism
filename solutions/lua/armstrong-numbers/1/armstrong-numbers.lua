@@ -1,14 +1,21 @@
 local ArmstrongNumbers = {}
 
 function ArmstrongNumbers.is_armstrong_number(number)
-    local power = #tostring(number)
-    local sum = 0
-    local num = number
-    while num > 0 do
-      sum = sum + ((num % 10) ^ power)
-      num = num // 10
-    end
-    return sum == number
+  if number == 0 then
+    return 0 == 0 ^ 1
+  end
+
+  local s = tostring(number)
+  local count = #s
+
+  local digits = {}
+  local sum = 0
+  for i = 1, count do
+    local d = s:byte(i) - string.byte('0')
+    sum = sum + (d ^ count)
+  end
+
+  return sum == number
 end
 
 return ArmstrongNumbers
